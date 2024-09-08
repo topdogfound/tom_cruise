@@ -10,20 +10,24 @@ services:
     working_dir: /var/www/html
     volumes:
       - ./tom_cruise:/var/www/html
-    ports:
-      - "8080:80"  # Adjust the port mapping if necessary
     networks:
       - tom_cruise_network
+    expose:
+      - "9000"  # Expose port 9000 for PHP-FPM
 
-  composer:
-    image: composer:latest
-    container_name: composer_container
+  tom_cruise_webserver:
+    image: nginx:alpine
+    container_name: tom_cruise_webserver_container
+    restart: unless-stopped
+    ports:
+      - "8080:80"
     volumes:
-      - ./tom_cruise:/app
-    working_dir: /app
+      - ./docker-compose/nginx/:/etc/nginx/conf.d
     networks:
       - tom_cruise_network
+    depends_on:
+      - tom_cruise_app
 
 networks:
-  tom_cruise_network: 
+  tom_cruise_network:
     driver: bridge

@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  tom_cruise_app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: tom_cruise_app_container
+    restart: unless-stopped
+    working_dir: /var/www/html
+    volumes:
+      - ./tom_cruise:/var/www/html
+    ports:
+      - "8080:80"  # Adjust the port mapping if necessary
+    networks:
+      - tom_cruise_network
+
+  composer:
+    image: composer:latest
+    container_name: composer_container
+    volumes:
+      - ./tom_cruise:/app
+    working_dir: /app
+    networks:
+      - tom_cruise_network
+
+networks:
+  tom_cruise_network: 
+    driver: bridge

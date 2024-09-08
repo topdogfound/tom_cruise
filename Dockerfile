@@ -30,5 +30,10 @@ WORKDIR /var/www/html
 # Expose port 80
 EXPOSE 80
 
+# Set permissions and ownership
+RUN chown -R www-data:www-data /var/www/html \
+    && find /var/www/html -type d -exec chmod 755 {} \; \
+    && find /var/www/html -type f -exec chmod 644 {} \;
+    
 # Start Apache
 CMD ["apache2-foreground"]
